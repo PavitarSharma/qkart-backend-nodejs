@@ -41,5 +41,22 @@ const bcrypt = require("bcryptjs");
  *
  * 200 status code on duplicate email - https://stackoverflow.com/a/53144807
  */
+const createUser = async (userBody) => {
+  if (await User.isEmailTaken(userBody.email)) {
+    throw new ApiError(httpStatus.OK, "Email already taken");
+  }
+  const user = await User.create(userBody);
+  return user;
+};
 
+const getUserById = async (id) => {
+  const user = await User.findById(id);
+  return user;
+};
 
+const getUserByEmail = async (email) => {
+  const user = await User.findOne({ email });
+  return user;
+};
+
+module.exports = { createUser, getUserById, getUserByEmail };

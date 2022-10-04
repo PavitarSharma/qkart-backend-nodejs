@@ -39,8 +39,25 @@ const { userService } = require("../services");
  *
  */
 const getUser = catchAsync(async (req, res) => {
-});
+  let data;
+  const userId = req.params.userId;
 
+  data = await userService.getUserById(userId);
+
+  if (!data) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  //console.log(req.user);
+
+  if (!data.email) {
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "User not authorized to access this resource"
+    );
+  }
+
+  res.send(data);
+});
 
 module.exports = {
   getUser,
