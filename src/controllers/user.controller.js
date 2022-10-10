@@ -49,7 +49,7 @@ const getUser = catchAsync(async (req, res) => {
   }
   //console.log(req.user);
 
-  if (!data.email) {
+  if (data.email !== req.user.email) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
       "User not authorized to access this resource"

@@ -5,9 +5,14 @@ const httpStatus = require("http-status");
 const routes = require("./routes/v1");
 const { errorHandler } = require("./middlewares/error");
 const ApiError = require("./utils/ApiError");
+const { jwtStrategy } = require("./config/passport");
+const passport = require("passport")
+const helmet = require("helmet");
 
 const app = express();
 
+// set security HTTP headers - https://helmetjs.github.io/
+app.use(helmet());
 
 // parse json request body
 app.use(express.json());
@@ -21,6 +26,10 @@ app.use(compression());
 // enable cors
 app.use(cors());
 app.options("*", cors());
+
+// passport
+app.use(passport.initialize());
+passport.use("jwt", jwtStrategy);
 
 
 // Reroute all API request starting with "/v1" route

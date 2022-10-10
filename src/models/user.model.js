@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 // NOTE - "validator" external library and not the custom middleware at src/middlewares/validate.js
 const validator = require("validator");
 const config = require("../config/config");
+const bcrypt = require("bcryptjs");
 
 const validateEmail = function (email) {
   const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -68,9 +69,22 @@ const userSchema = mongoose.Schema(
  * @returns {Promise<boolean>}
  */
 userSchema.statics.isEmailTaken = async function (email) {
-  const user = this.findOne({ email });
+  const user = await this.findOne({ email });
   return !!user;
 };
+
+userSchema.methods.isPasswordMatch = async function(password) {
+  const user = await bcrypt.compare(password, this.password);
+  return user
+}
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, 10);
+  }
+  next();
+});
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS
 /*
