@@ -40,25 +40,55 @@ const { userService } = require("../services");
  */
 const getUser = catchAsync(async (req, res) => {
   let data;
-  const userId = req.params.userId;
-
-  data = await userService.getUserById(userId);
+  if (req.query.q === "address") {
+    data = await userService.getUserAddressById(req.params.userId);
+  } else {
+    data = await userService.getUserById(req.params.userId);
+  }
 
   if (!data) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
-  //console.log(req.user);
 
-  if (data.email !== req.user.email) {
+  if (data.email != req.user.email) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
       "User not authorized to access this resource"
     );
   }
 
-  res.send(data);
+  if (req.query.q === "address") {
+    res.send({
+      address: data.address,
+    });
+  } else {
+    res.send(data);
+  }
+});
+
+const setAddress = catchAsync(async (req, res) => {
+  const user = await userService.getUserById(req.params.userId);
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  if (user.email != req.user.email) {
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "User not authorized to access this resource"
+    );
+  }
+
+ 
+
+  const address = await userService.setAddress(user, req.body.address);
+
+  res.send({
+    address: address,
+  });
 });
 
 module.exports = {
   getUser,
+  setAddress,
 };

@@ -86,6 +86,8 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+
+
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS
 /*
  * Create a Mongoose model out of userSchema and export the model as "User"
