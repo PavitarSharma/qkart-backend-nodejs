@@ -205,9 +205,14 @@ const deleteProductFromCart = async (user, productId) => {
   await cart.save();
 };
 
+
+const checkout = async (user) => {
+};
+
 module.exports = {
   getCartByUser,
   addProductToCart,
   updateProductInCart,
   deleteProductFromCart,
+  checkout,
 };
