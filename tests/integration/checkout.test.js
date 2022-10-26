@@ -34,7 +34,8 @@ describe("Cart routes", () => {
       console.log(res.text);
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is "401 UNAUTHORIZED"
-       expect(true).toEqual(false);
+      //  expect(true).toEqual(false);
+      expect(res.status).toEqual(httpStatus.UNAUTHORIZED);
     });
 
     it("should return 400 if cart is empty", async () => {
@@ -50,7 +51,8 @@ describe("Cart routes", () => {
         .send();
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is "400 BAD REQUEST"
-       expect(true).toEqual(false);
+      //  expect(true).toEqual(false);
+      expect(res.status).toEqual(httpStatus.BAD_REQUEST);
     });
 
     it("should return 400 if user's address is not set", async () => {
@@ -65,7 +67,8 @@ describe("Cart routes", () => {
         .send();
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is 400
-       expect(true).toEqual(false);
+      //  expect(true).toEqual(false);
+      expect(res.status).toEqual(httpStatus.BAD_REQUEST);
     });
 
     it("should return 400 if not enough wallet balance", async () => {
@@ -79,7 +82,9 @@ describe("Cart routes", () => {
         .send();
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is 400
-       expect(true).toEqual(false);
+      //  expect(true).toEqual(false);
+
+      expect(res.status).toEqual(httpStatus.BAD_REQUEST);
     });
 
     it("should return 204 if cart is valid", async () => {
@@ -92,11 +97,15 @@ describe("Cart routes", () => {
         .send();
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is 204
-       expect(true).toEqual(false);
+      //  expect(true).toEqual(false);
+      expect(res.status).toEqual(httpStatus.NO_CONTENT);
 
       // TODO: CRIO_TASK_MODULE_TEST - Get the cart for "userOne" and assert if
       // - Cart exists
       // - Length of "cartItems" array is 0
+      const dbCart = await Cart.findOne({ email: userOne.email });
+      expect(dbCart).toBeDefined();
+      expect(dbCart.cartItems.length).toEqual(0);
     });
   });
 });

@@ -86,6 +86,12 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.methods.hasSetNonDefaultAddress = async function () {
+  const user = this;
+
+  return await user.address !== config.default_address;
+};
+
 
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS
@@ -100,4 +106,4 @@ userSchema.pre("save", async function (next) {
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = { User } ;
+module.exports.User = User ;
