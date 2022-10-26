@@ -74,6 +74,8 @@ const login = catchAsync(async (req, res) => {
   res.send({ user, tokens });
 });
 
+
+
 module.exports = {
   register,
   login,
