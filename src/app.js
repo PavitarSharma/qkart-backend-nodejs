@@ -8,7 +8,8 @@ const ApiError = require("./utils/ApiError");
 const { jwtStrategy } = require("./config/passport");
 const passport = require("passport")
 const helmet = require("helmet");
-
+const { Product } = require("./models");
+const products = require("../data/export_qkart_products.json")
 const app = express();
 
 // set security HTTP headers - https://helmetjs.github.io/
@@ -39,6 +40,8 @@ app.use("/v1", routes);
 app.use((req, res, next) => {
     next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 });
+
+
 
 // handle error
 app.use(errorHandler);
